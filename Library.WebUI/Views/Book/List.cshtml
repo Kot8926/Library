@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Library.Domain.Entities.Book>
+
+@{
+    ViewBag.Title = "Books";
+}
+
+@foreach (var b in Model)
+{
+    <div class="item">
+        <h2>@b.Name</h2>
+        <h4>@b.PriceLoss.ToString("c")</h4>
+    </div>
+}
