@@ -10,15 +10,19 @@ namespace Library.WebUI.Controllers
 {
     public class BookController : Controller
     {
+        public int PageSize = 4;
         private IBookRepository reposit;
         public BookController(IBookRepository bookRep)
         {
             this.reposit = bookRep;   
         }
 
-        public ViewResult List()
+        public ViewResult List(int page =1)
         {
-            return View(reposit.Books);
+            return View(reposit.Books
+                .OrderBy(b => b.BookId)
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize));
         }
 
     }
