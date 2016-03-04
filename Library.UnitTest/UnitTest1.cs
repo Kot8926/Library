@@ -16,8 +16,7 @@ namespace Library.UnitTest
     public class UnitTest1
     {
         [TestMethod]
-        //Создание страниц через контроллер.
-        //Плохой способ.
+        //Создание страниц через контроллер-------------------------------------------------------------------------------------
         public void TestPageForList()
         {
             //Arrage
@@ -31,21 +30,22 @@ namespace Library.UnitTest
                 new Book {BookId =6, Name = "b6"},
             }.AsQueryable());
 
-            BookController bookContr = new BookController(mock.Object);
-            bookContr.PageSize = 3;
+            BookController controller = new BookController(mock.Object);
+            controller.PageSize = 3;
 
             //Act
-            IEnumerable<Book> result = (IEnumerable<Book>)bookContr.List(2).Model;
+            //IEnumerable<Book> result = (IEnumerable<Book>)bookContr.List(2).Model;
+            BookListViewModel result = (BookListViewModel)controller.List(2).Model;
 
             //Assert
-            Book[] books = result.ToArray();
-            Assert.IsTrue(books.Length == 3);
-            Assert.AreEqual("b5", books[1].Name );
+            Book[] books = result.Books.ToArray();
+            Assert.IsTrue(books.Count() == 3);
+            Assert.AreEqual("b5", books[1].Name);
             Assert.AreEqual("b6", books[2].Name);
         }
 
         [TestMethod]
-        //Ссылки на страницы через вспомогательный
+        //Ссылки на страницы через вспомогательный-----------------------------------------------------------------------------------------
         //метод HTML PageLinks
         public void TestPageLinks()
         {
@@ -72,6 +72,35 @@ namespace Library.UnitTest
             Assert.AreEqual(result.ToString(), @"<a href=""Page1"">1</a>"
             + @"<a class=""selected"" href=""Page2"">2</a>"
             + @"<a href=""Page3"">3</a>");
+        }
+
+        [TestMethod]
+        //Что передает метод в представление-----------------------------------------------------------------------------------
+        public void TestList()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book> {
+                new Book {BookId =1, Name = "b1"},
+                new Book {BookId =2, Name = "b2"},
+                new Book {BookId =3, Name = "b3"},
+                new Book {BookId =4, Name = "b4"},
+                new Book {BookId =5, Name = "b5"},
+                new Book {BookId =6, Name = "b6"},
+            }.AsQueryable());
+
+            BookController controller = new BookController(mock.Object);
+            controller.PageSize = 3;
+
+            //Act
+            BookListViewModel result = (BookListViewModel)controller.List(2).Model;
+
+            //Assert
+            PagingInfo pInfo = result.PagingInfo;
+            Assert.AreEqual(pInfo.CurrentPage, 2);
+            Assert.AreEqual(pInfo.ItemsPerPage, 3);
+            Assert.AreEqual(pInfo.TotalItem, 6);
+            Assert.AreEqual(pInfo.TotalPages, 2);           
         }
     }
 }

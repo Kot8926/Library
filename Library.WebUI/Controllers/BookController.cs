@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Library.Domain.Abstract;
 using Library.Domain.Entities;
+using Library.WebUI.Models;
 
 namespace Library.WebUI.Controllers
 {
@@ -16,13 +17,25 @@ namespace Library.WebUI.Controllers
         {
             this.reposit = bookRep;   
         }
-
-        public ViewResult List(int page =1)
+        
+        public ViewResult List(int page = 1)
         {
-            return View(reposit.Books
-                .OrderBy(b => b.BookId)
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize));
+            //Формируем данные для передачи в представление
+            BookListViewModel vModel = new BookListViewModel
+            {
+                Books = reposit.Books
+                    .OrderBy(b => b.BookId)
+                    .Skip((page - 1) * PageSize)
+                    .Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    TotalItem = reposit.Books.Count(),
+                    ItemsPerPage = PageSize,
+                }
+            };
+
+            return View(vModel);
         }
 
     }
