@@ -5,11 +5,8 @@
 }
 
 @foreach (var b in Model.Books)
-{
-    <div class="item">
-        <h2>@b.Name</h2>
-        <h4>@b.PriceLoss.ToString("c")</h4>
-    </div>
+{  
+        Html.RenderPartial("BookSummary", b);  
 }    
     <div class="pages">
         @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x}))

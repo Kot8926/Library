@@ -67,7 +67,7 @@ BODY
   margin: 0; 
 } 
 
-DIV#header DIV.title, DIV.item H3, DIV.item H4, DIV.pager A 
+DIV#header DIV.title, DIV.item H2, DIV.item H4, DIV.pages A 
 { 
   font: bold 1em "Arial Narrow", "Franklin Gothic Medium", Arial; 
 } 
@@ -112,7 +112,7 @@ DIV.item
     padding-top: 0; 
   } 
  
-  DIV.item H3 
+  DIV.item H2 
   { 
     font-size: 1.3em; 
     margin: 0 0 .25em 0; 
@@ -124,7 +124,7 @@ DIV.item
     margin: .4em 0 0 0; 
   } 
  
-DIV.pager 
+DIV.pages 
 { 
   text-align: right; 
   border-top: 2px solid silver; 
@@ -132,7 +132,7 @@ DIV.pager
   margin-top: 1em; 
 } 
  
-  DIV.pager A 
+  DIV.pages A 
   { 
     font-size: 1.1em; 
     color: #666; 
@@ -140,12 +140,12 @@ DIV.pager
     padding: 0 .4em 0 .4em; 
   } 
  
-    DIV.pager A:hover 
+    DIV.pages A:hover 
     { 
       background-color: Silver; 
     } 
  
-    DIV.pager A.selected 
+    DIV.pages A.selected 
     { 
       background-color: #353535; 
       color: White; 
