@@ -35,13 +35,6 @@ namespace Library.WebUI.Infrastructure
         //Установить зависимости
         private void AddBindings()
         {
-            //Mock<IBookRepository> mock = new Mock<IBookRepository>();
-            //mock.Setup(m => m.Books).Returns(new List<Book> {
-            //    new Book {Name = "Шерлок холмс", PriceLoss = 130},
-            //    new Book {Name = "Гарри поттер", PriceLoss = 120},
-            //    new Book {Name = "Война", PriceLoss = 300}
-            //}.AsQueryable());
-
             ninjectKernel.Bind<IBookRepository>().To<EFBookRepository>();
         }
     }

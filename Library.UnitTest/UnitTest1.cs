@@ -131,5 +131,32 @@ namespace Library.UnitTest
             Assert.IsTrue(arrBook[0].Name == "b3");
             Assert.IsTrue(arrBook[2].Name == "b7" && arrBook[0].Genre == "g2");
         }
+
+        //Тест формирования списка жанров в контроллере Nav--------------------------------------------------------------
+        [TestMethod]
+        public void CreateListGenre()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book>
+            {
+                new Book{BookId = 1, Name = "b1", Genre = "genre1"},
+                new Book{BookId = 2, Name = "b2", Genre = "genre1"},
+                new Book{BookId = 3, Name = "b3", Genre = "genre3"},
+                new Book{BookId = 4, Name = "b4", Genre = "genre2"},
+                new Book{BookId = 5, Name = "b5", Genre = "genre1"},
+            }.AsQueryable());
+
+            NavController controller = new NavController(mock.Object);
+
+            //Act
+            String[] result = ((IEnumerable<string>)controller.Menu().Model).ToArray();
+
+            //Assert
+            Assert.AreEqual(result.Length, 3);
+            Assert.IsTrue(result[0] == "genre1" &&
+                                result[1] == "genre2" &&
+                                result[2] == "genre3");
+        }   
     }
 }

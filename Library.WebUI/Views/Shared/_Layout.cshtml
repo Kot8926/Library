@@ -11,7 +11,7 @@
         <div class="title">Home library</div>
     </div>
     <div id="genre">
-        We will put something useful here later
+        @{ Html.RenderAction("Menu", "Nav"); }
     </div>
     <div id="content">
         @RenderBody()
