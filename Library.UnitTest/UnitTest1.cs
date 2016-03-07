@@ -35,7 +35,7 @@ namespace Library.UnitTest
 
             //Act
             //IEnumerable<Book> result = (IEnumerable<Book>)bookContr.List(2).Model;
-            BookListViewModel result = (BookListViewModel)controller.List(2).Model;
+            BookListViewModel result = (BookListViewModel)controller.List(null , 2).Model;
 
             //Assert
             Book[] books = result.Books.ToArray();
@@ -93,7 +93,7 @@ namespace Library.UnitTest
             controller.PageSize = 3;
 
             //Act
-            BookListViewModel result = (BookListViewModel)controller.List(2).Model;
+            BookListViewModel result = (BookListViewModel)controller.List(null, 2).Model;
 
             //Assert
             PagingInfo pInfo = result.PagingInfo;
@@ -101,6 +101,35 @@ namespace Library.UnitTest
             Assert.AreEqual(pInfo.ItemsPerPage, 3);
             Assert.AreEqual(pInfo.TotalItem, 6);
             Assert.AreEqual(pInfo.TotalPages, 2);           
+        }
+
+        //Фильтрация по жанрам--------------------------------------------------------------------------------------------------
+        [TestMethod]
+        public void TestFilterGenreBook()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book>{
+                new Book {BookId =1, Name ="b1", Genre ="g1"},
+                new Book {BookId =2, Name ="b2", Genre ="g1"},
+                new Book {BookId =3, Name ="b3", Genre ="g2"},
+                new Book {BookId =4, Name ="b4", Genre ="g1"},
+                new Book {BookId =5, Name ="b5", Genre ="g2"},
+                new Book {BookId =6, Name ="b6", Genre ="g1"},
+                new Book {BookId =7, Name ="b7", Genre ="g2"},
+            }.AsQueryable());
+
+            BookController controller = new BookController(mock.Object);
+            controller.PageSize = 3;
+
+            //Act
+            BookListViewModel result = (BookListViewModel)controller.List("g2", 1).Model;
+
+            //Assert
+            Book[] arrBook = result.Books.ToArray();
+            Assert.AreEqual(arrBook.Length, 3);
+            Assert.IsTrue(arrBook[0].Name == "b3");
+            Assert.IsTrue(arrBook[2].Name == "b7" && arrBook[0].Genre == "g2");
         }
     }
 }

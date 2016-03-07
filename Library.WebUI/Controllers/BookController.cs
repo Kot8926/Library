@@ -18,12 +18,13 @@ namespace Library.WebUI.Controllers
             this.reposit = bookRep;   
         }
         
-        public ViewResult List(int page = 1)
+        public ViewResult List(string genre, int page = 1)
         {
             //Формируем данные для передачи в представление
             BookListViewModel vModel = new BookListViewModel
             {
                 Books = reposit.Books
+                    .Where(b => genre == null || b.Genre == genre)
                     .OrderBy(b => b.BookId)
                     .Skip((page - 1) * PageSize)
                     .Take(PageSize),
@@ -32,9 +33,10 @@ namespace Library.WebUI.Controllers
                     CurrentPage = page,
                     TotalItem = reposit.Books.Count(),
                     ItemsPerPage = PageSize,
-                }
+                },
+                CurrentGenre = genre
             };
-
+            
             return View(vModel);
         }
 

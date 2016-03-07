@@ -11,5 +11,7 @@ namespace Library.WebUI.Models
         public IEnumerable<Book> Books { get; set; }
         //Список страниц
         public PagingInfo PagingInfo { get; set; }
+        //Для отображения списка жанров
+        public string CurrentGenre { get; set; }
     }
 }

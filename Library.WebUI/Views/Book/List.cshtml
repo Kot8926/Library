@@ -9,6 +9,7 @@
         Html.RenderPartial("BookSummary", b);  
 }    
     <div class="pages">
-        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x}))
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List",
+            new { page = x, Model.CurrentGenre }))
     </div>
 
