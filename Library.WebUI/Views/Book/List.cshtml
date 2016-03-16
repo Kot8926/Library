@@ -10,6 +10,6 @@
 }    
     <div class="pages">
         @Html.PageLinks(Model.PagingInfo, x => Url.Action("List",
-            new { page = x, Model.CurrentGenre }))
+            new { page = x, genre = Model.CurrentGenre }))
     </div>
 

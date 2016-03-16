@@ -31,7 +31,9 @@ namespace Library.WebUI.Controllers
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
-                    TotalItem = reposit.Books.Count(),
+                    TotalItem = genre == null ?
+                        reposit.Books.Count() :
+                        reposit.Books.Where(b => b.Genre == genre).Count(),
                     ItemsPerPage = PageSize,
                 },
                 CurrentGenre = genre

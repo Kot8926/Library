@@ -158,5 +158,61 @@ namespace Library.UnitTest
                                 result[1] == "genre2" &&
                                 result[2] == "genre3");
         }   
+
+        //Подсветка выбранного жанра в списке
+        [TestMethod]
+        public void SelectedGenre()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book> {
+                new Book {BookId =1, Name = "book1", Genre ="genre1"},
+                new Book {BookId =2, Name = "book2", Genre ="genre2"},
+                new Book {BookId =3, Name = "book3", Genre ="genre1"},
+            }.AsQueryable());
+
+            NavController controller = new NavController(mock.Object);
+
+            string genreToSelected = "genre2";
+            //Act
+            string result = controller.Menu(genreToSelected).ViewBag.CurrentGenre;
+
+            //Assert
+            Assert.IsTrue(result == genreToSelected);
+
+        }
+
+        //Количество страниц в выбранном жанре
+        [TestMethod]
+        public void CountPagesGenre()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book>
+            {
+                new Book {BookId = 1, Genre = "g1"},
+                new Book {BookId = 2, Genre = "g2"},
+                new Book {BookId = 3, Genre = "g1"},
+                new Book {BookId = 4, Genre = "g3"},
+                new Book {BookId = 5, Genre = "g1"},
+                new Book {BookId = 6, Genre = "g3"},
+                new Book {BookId = 7, Genre = "g1"},
+            }.AsQueryable());
+
+            BookController controller = new BookController(mock.Object);
+            controller.PageSize = 3;
+
+            //Act
+            int res = ((BookListViewModel)controller.List(null).Model).PagingInfo.TotalPages;
+            int res1 = ((BookListViewModel)controller.List("g1").Model).PagingInfo.TotalPages;
+            int res2 = ((BookListViewModel)controller.List("g2").Model).PagingInfo.TotalPages;
+            int res3 = ((BookListViewModel)controller.List("g3").Model).PagingInfo.TotalPages;
+
+            //Assert
+            Assert.IsTrue(res == 3);
+            Assert.IsTrue(res1 == 2);
+            Assert.IsTrue(res2 == 1);
+            Assert.IsTrue(res3 == 1);
+        }
     }
 }
