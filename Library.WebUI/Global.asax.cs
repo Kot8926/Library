@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Library.WebUI.Infrastructure;
+using Library.WebUI.Binders;
+using Library.Domain.Entities;
 
 namespace Library.WebUI
 {
@@ -26,6 +28,8 @@ namespace Library.WebUI
 
             //Указать фабрику контроллеров
             ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
+            //Пользовательский механизм связывания данных модели
+            ModelBinders.Binders.Add(typeof(Cart), new CartModelBinder());
         }
     }
 }

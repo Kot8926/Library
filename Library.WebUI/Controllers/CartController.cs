@@ -17,48 +17,35 @@ namespace Library.WebUI.Controllers
             reposit = bookRep;
         }
 
-        //Создаем сессию. Для сохранения и извлечения обьектов
-        private Cart GetCart()
-        {
-            Cart cart = (Cart)Session["Cart"];
-            if (cart == null)
-            {
-                cart = new Cart();
-                Session["Cart"] = cart;
-            }
-
-            return cart;
-        }
-
-        //Помещаем обьект в корзину. Перенаправляем к представлению Index.
-        public RedirectToRouteResult AddToCart(int bookId, string returnUrl)
+        //Помещаем обьект в корзину. Перенаправляем в метод Index.
+        public RedirectToRouteResult AddToCart(Cart cart, int bookId, string returnUrl)
         {
             Book book = reposit.Books.FirstOrDefault(b => b.BookId == bookId);
             if (book != null)
             {
-                GetCart().AddBook(book, 1);
+                cart.AddBook(book, 1);
             }
 
             return RedirectToAction("Index", new { returnUrl });
         }
 
         //Удаляем обьект из корзины. Перенаправляем к Index
-        public RedirectToRouteResult DeleteToCart(int bookId, string returnUrl)
+        public RedirectToRouteResult DeleteToCart(Cart cart, int bookId, string returnUrl)
         {
             Book book = reposit.Books.FirstOrDefault(b => b.BookId == bookId);
             if (book != null)
             {
-                GetCart().DeleteBook(book);
+                cart.DeleteBook(book);
             }
 
             return RedirectToAction("Index", new { returnUrl });
         }
 
-        public ViewResult Index(string returnUrl)
+        public ViewResult Index(Cart cart, string returnUrl)
         {
             return View(new CartIndexViewModel 
             { 
-                Cart = GetCart(),
+                Cart = cart,
                 ReturnUrl = returnUrl,
             });
         }

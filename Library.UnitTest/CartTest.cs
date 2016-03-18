@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Moq;
+using System.Web.Mvc;
+using Library.WebUI.Controllers;
 using Library.Domain.Entities;
+using Library.Domain.Abstract;
+using Library.WebUI.Models;
 
 namespace Library.UnitTest
 {
     [TestClass]
     public class CartTest
     {
-        //Добавление нового элемента в корзину------------------------------------------------------------------------------
+        //Добавление нового элемента в корзину метод домена------------------------------------------------------------------------------
         [TestMethod]
         public void Add_New_Book_Test()
         {
@@ -31,7 +36,7 @@ namespace Library.UnitTest
             Assert.IsTrue(result.Length == 2);
         }
 
-        //Добавление существующего элемента в корзину----------------------------------------------------------------------
+        //Добавление существующего элемента в корзину метод домена----------------------------------------------------------------------
         [TestMethod]
         public void Add_Quantity_For_Existing_Book()
         {
@@ -52,7 +57,7 @@ namespace Library.UnitTest
             Assert.AreEqual(result[0].Quantity, 11);
         }
 
-        //Удаление элемента из корзины--------------------------------------------------------------------------------------
+        //Удаление элемента из корзины метод домена--------------------------------------------------------------------------------------
         [TestMethod]
         public void Delete_Book()
         {
@@ -76,7 +81,7 @@ namespace Library.UnitTest
             Assert.IsTrue(target.Lines.Count() == 2);
         }
 
-        //Рассчет общей суммы при утрате-------------------------------------------------------------------------------------
+        //Рассчет общей суммы при утрате метод домена-------------------------------------------------------------------------------------
         [TestMethod]
         public void Calculate_Price_Lost()
         {
@@ -97,7 +102,7 @@ namespace Library.UnitTest
             Assert.AreEqual(result, 39M);
         }
 
-        //Очистить контейнер--------------------------------------------------------------------------------------------------
+        //Очистить контейнер метод домена--------------------------------------------------------------------------------------------------
         [TestMethod]
         public void Clear_All_Cart()
         {
@@ -118,6 +123,66 @@ namespace Library.UnitTest
 
             //Assert
             Assert.IsTrue(target.Lines.Count() == 0);
+        }
+
+        //Добавление элемента в корзину в контроллере---------------------------------------------------------------
+        [TestMethod]
+        public void Add_To_Cart()
+        {
+            //Arrange
+            //Имитируем хранилище
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book> 
+            { 
+                new Book { BookId = 1, Name = "book1" },
+            }.AsQueryable());
+
+            //Создаем корзину
+            Cart cart = new Cart();
+            //Контроллер
+            CartController controller = new CartController(mock.Object);
+
+            //Act
+            controller.AddToCart(cart, 1, null);
+
+            //Assert
+            Assert.AreEqual(cart.Lines.Count(), 1);
+            Assert.AreEqual(cart.Lines.ToArray()[0].Book.Name, "book1");
+        }
+
+        //Проверка перенаправления в представление. После добавления элемента в корзину. И возврата Url
+        [TestMethod]
+        public void Goes_To_Index()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book> 
+            { 
+                new Book { BookId = 1, Name = "book1" },
+                new Book { BookId = 2, Name = "book2" },
+            }.AsQueryable());
+
+            Cart cart = new Cart();
+
+            CartController controller = new CartController(mock.Object);
+
+            controller.AddToCart(cart, 1, null);
+            controller.AddToCart(cart, 2, null);
+
+            //Act
+            CartIndexViewModel result = (CartIndexViewModel)controller.Index(cart, "Url").Model;
+            RedirectToRouteResult routeRes = controller.AddToCart(cart, 1, "Url");
+            
+            
+            //Assert
+            CartLine[] list = result.Cart.Lines.ToArray();
+
+            Assert.AreEqual(result.Cart.Lines.Count(), 2);
+            Assert.AreEqual(list[0].Book.Name, "book1");
+            Assert.AreEqual(result.ReturnUrl, "Url");
+            Assert.AreEqual(routeRes.RouteValues["action"], "Index");
+            Assert.AreEqual(routeRes.RouteValues["returnUrl"], "Url");
+            
         }
     }
 }
