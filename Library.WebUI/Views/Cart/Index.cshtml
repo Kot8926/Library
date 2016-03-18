@@ -1,0 +1,42 @@
+﻿@model Library.WebUI.Models.CartIndexViewModel
+
+@{
+    ViewBag.Title = "Library: Your Cart";
+}
+
+<h2>Your Cart</h2>
+<table width="90%" align="center">
+    <thead>
+        <tr>
+            <th align="center">Quentity</th>
+            <th align="left">Item</th>
+            <th align="right">Price Loss</th>
+            <th align="right">SubTotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in @Model.Cart.Lines)
+        {
+            <tr>
+                <th align="center">@line.Quantity</th>
+                <th align="left">@line.Book.Name</th>
+                <th align="right">@line.Book.PriceLoss.ToString("c")</th>
+                <th align="right">@((line.Quantity * line.Book.PriceLoss).ToString("c"))</th>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" align="right">Total:</td>
+            <td align="right">
+                @Model.Cart.CostForLost().ToString("c");
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<p align="center" class="actionButtons">
+    <a href="@Model.ReturnUrl">Continue shopping</a>
+</p>
+ 
+
