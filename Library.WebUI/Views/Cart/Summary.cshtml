@@ -1,0 +1,13 @@
+﻿@model Library.Domain.Entities.Cart
+
+<div id="cart">
+    <span class="caption">
+        <b>Your cart:</b>
+        @Model.Lines.Sum(b => b.Quantity) item(s),
+        @Model.CostForLost().ToString("c")
+    </span>
+   
+    @Html.ActionLink("Checkout", "Index", "Cart", new {returnUrl = Request.Url.PathAndQuery}, null)
+</div>          
+
+

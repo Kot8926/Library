@@ -49,5 +49,11 @@ namespace Library.WebUI.Controllers
                 ReturnUrl = returnUrl,
             });
         }
+
+        //Метод для виджета корзины
+        public PartialViewResult Summary(Cart cart)
+        {
+            return PartialView(cart);
+        }
     }
 }

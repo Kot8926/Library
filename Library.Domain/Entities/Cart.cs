@@ -48,7 +48,7 @@ namespace Library.Domain.Entities
             bookList.Clear();
         }
 
-        //Стоимость возмещения при утрате
+        //Стоимость возмещения при утрате всех книг
         public decimal CostForLost()
         {
             return bookList.Sum(s => s.Book.PriceLoss * s.Quantity);

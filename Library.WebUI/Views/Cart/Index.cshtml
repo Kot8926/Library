@@ -22,6 +22,13 @@
                 <th align="left">@line.Book.Name</th>
                 <th align="right">@line.Book.PriceLoss.ToString("c")</th>
                 <th align="right">@((line.Quantity * line.Book.PriceLoss).ToString("c"))</th>
+                <th align="right">@using (Html.BeginForm("DeleteToCart", "Cart"))
+                    {
+                        @Html.HiddenFor(x => x.ReturnUrl);
+                        @Html.Hidden("BookId", line.Book.BookId);
+                        <input class="actionButtons" type="submit" value="Remove" />
+                    }
+                </th>
             </tr>
         }
     </tbody>

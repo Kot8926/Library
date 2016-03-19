@@ -4,11 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="~/Content/Site.css"  type="text/css" rel="stylesheet" /> 
+    <link href="~/Content/Site.css"  type="text/css" rel="stylesheet" />    
 </head>
 <body>
     <div id="header">
-        <div class="title">Home library</div>
+        @{Html.RenderAction("Summary", "Cart");}
+        <div class="title">Home library</div>        
     </div>
     <div id="genre">
         @{ Html.RenderAction("Menu", "Nav"); }
