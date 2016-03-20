@@ -1,0 +1,33 @@
+﻿@model Library.Domain.Entities.ShippingDetails
+
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<h2>Оформление заказа</h2>
+Пожалуйста заполните форму:
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary();
+    <h3>Заказ для:</h3>
+    <div>Имя: @Html.EditorFor(x => x.FirstName)</div>
+    <div>Фамилия: @Html.EditorFor(x => x.SecondName)</div>
+    
+    <h3>Адрес:</h3>
+    <div>Страна: @Html.EditorFor(x => x.Contry)</div>
+    <div>Город: @Html.EditorFor(x => x.City)</div>
+    <div>Адрес: @Html.EditorFor(x => x.Adress)</div>
+    <div>Индекс: @Html.EditorFor(x => x.Index)</div>
+    
+    <h3>Опции:</h3>
+    <label>
+    @Html.EditorFor(x => x.GiftWrap)
+    Упаковка
+    </label>
+    
+    <p align ="center">
+        <input class="actionButtons" type="submit" value="Complete order" />
+    </p>
+    
+    
+}

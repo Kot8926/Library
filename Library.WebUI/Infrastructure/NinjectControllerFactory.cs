@@ -8,6 +8,7 @@ using Library.Domain.Entities;
 using Library.Domain.Abstract;
 using System.Collections.Generic;
 using Library.Domain.Concrete;
+using System.Configuration;
 
 namespace Library.WebUI.Infrastructure
 {
@@ -36,6 +37,11 @@ namespace Library.WebUI.Infrastructure
         private void AddBindings()
         {
             ninjectKernel.Bind<IBookRepository>().To<EFBookRepository>();
-        }
+            EmailSettings emailSettings = new EmailSettings
+            {
+                WriteAsFile = bool.Parse(ConfigurationManager.AppSettings["Email.WriteAsFile"] ?? "false")
+            };
+            ninjectKernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>().WithConstructorArgument("settings", emailSettings);   
+       }
     }
 }

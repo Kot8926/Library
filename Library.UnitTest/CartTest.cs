@@ -140,7 +140,7 @@ namespace Library.UnitTest
             //Создаем корзину
             Cart cart = new Cart();
             //Контроллер
-            CartController controller = new CartController(mock.Object);
+            CartController controller = new CartController(mock.Object, null);
 
             //Act
             controller.AddToCart(cart, 1, null);
@@ -164,7 +164,7 @@ namespace Library.UnitTest
 
             Cart cart = new Cart();
 
-            CartController controller = new CartController(mock.Object);
+            CartController controller = new CartController(mock.Object, null);
 
             controller.AddToCart(cart, 1, null);
             controller.AddToCart(cart, 2, null);
@@ -181,8 +181,87 @@ namespace Library.UnitTest
             Assert.AreEqual(list[0].Book.Name, "book1");
             Assert.AreEqual(result.ReturnUrl, "Url");
             Assert.AreEqual(routeRes.RouteValues["action"], "Index");
-            Assert.AreEqual(routeRes.RouteValues["returnUrl"], "Url");
-            
+            Assert.AreEqual(routeRes.RouteValues["returnUrl"], "Url");         
+        }
+
+        //Обработчик заказа не вызывается если корзина пустая
+        [TestMethod]
+        public void Cannot_Checkout_Empty_Cart()
+        {
+            //Arrage
+            //Имитация обработчика заказа
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            //Пустая корзина
+            Cart cart = new Cart();
+            //Форма заказа пустая
+            ShippingDetails shipingDetails = new ShippingDetails();
+            //Контроллер
+            CartController controller = new CartController(null, mock.Object);
+
+            //Act
+            ViewResult result = controller.Checkout(cart, shipingDetails);
+
+            //Assert
+            // Обработчик заказа не вызывается
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Never());
+            // Возращается представление по умолчанию 
+            Assert.AreEqual("", result.ViewName);
+            // Передается недопустимая модель
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid); 
+        }
+
+        //Обработчик заказа не вызывается если неверные реквизиты доставки
+        [TestMethod]
+        public void Cannot_Checkout_Invalid_ShipingDetails()
+        {
+            //Arrage
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            // Корзина содержит книгу
+            Cart cart = new Cart();
+            cart.AddBook(new Book(), 1);
+            // Пустая форма заказа
+            ShippingDetails shippingDetails = new ShippingDetails();
+
+            CartController controller = new CartController(null, mock.Object);
+
+            controller.ModelState.AddModelError("error", "error");
+
+            //Act
+            ViewResult result = controller.Checkout(cart, shippingDetails);
+
+            //Assert
+            //Обработчик заказа небыл вызван
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Never());
+            // Возращается представление по умолчанию 
+            Assert.AreEqual("", result.ViewName);
+            // Передается недопустимая модель
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        //Обработчик заказа вызывается
+        [TestMethod]
+        public void Can_Checkout_And_Submit_Order()
+        {
+            //Arrage
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            // Корзина содержит книгу
+            Cart cart = new Cart();
+            cart.AddBook(new Book(), 1);
+            //Форма заказа
+            ShippingDetails shippingDetails = new ShippingDetails();
+
+            CartController controller = new CartController(null, mock.Object);
+
+            //Act
+            ViewResult result = controller.Checkout(cart, shippingDetails);
+
+            //Assert
+            //Обработчик заказа был вызван 1 раз
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Once());
+            // Возращается представление Complied 
+            Assert.AreEqual("Complied", result.ViewName);
+            // Передается допустимая модель
+            Assert.AreEqual(true, result.ViewData.ModelState.IsValid);
         }
     }
 }
