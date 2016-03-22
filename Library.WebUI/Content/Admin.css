@@ -1,4 +1,5 @@
-﻿BODY, TD { font-family: Segoe UI, Verdana } 
+﻿/*Admin.Index*/
+BODY, TD { font-family: Segoe UI, Verdana } 
 
 H1 
 { 
@@ -16,6 +17,10 @@ TABLE.grid TH.NumericCol, Table.grid TD.NumericCol
 } 
  FORM {margin-bottom: 0px; }
 
+ /*Admin.Edit*/
+.editor-field { margin-bottom: .8em; } 
+.editor-label { font-weight: bold; } 
+.editor-label:after { content: ":" }
 /*
 DIV#content { padding: .9em; }  
 DIV.Message { background: gray; color:White; padding: .2em; margin-top:.25em; } 

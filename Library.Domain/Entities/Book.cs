@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Web.Mvc;
+
 
 namespace Library.Domain.Entities
 {
     public class Book
     {
+        [HiddenInput( DisplayValue = false )]
         public int BookId { get; set; }
         public string Name { get; set; }
         public string Author { get; set; }
