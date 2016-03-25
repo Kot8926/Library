@@ -81,5 +81,50 @@ namespace Library.UnitTest
             //Assert
             Assert.IsNull(result);
         } 
+
+        //Метод Edit выполняется если переданы верные данные для обновления----------------------------------------------------
+        [TestMethod]
+        public void Can_Save_Valid_Changes()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+
+            AdminController target = new AdminController(mock.Object);
+
+            Book book = new Book { Name = "Book1" };
+
+            //Act
+            ActionResult result = target.Edit(book);
+
+            //Assert
+            //Проверяет вызывается ли метод
+            mock.Verify(m => m.SaveBook(book));
+            //Результат не должен быть типом ViewResult
+            Assert.IsNotInstanceOfType(result, typeof(ViewResult));          
+        }
+
+        //Метод Edit невыполняется если данные не верны--------------------------------------------------------------------------------------
+        [TestMethod]
+        public void Cannot_Save_Invalid_Changes()
+        {
+            //Arrange
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+
+            AdminController target = new AdminController(mock.Object);
+
+            Book book = new Book { Name = "Book1" };
+
+            //Имитируем что модель не прошла валидацию
+            target.ModelState.AddModelError("error", "error");
+
+            //Act
+            ActionResult result = target.Edit(book);
+
+            //Assert
+            //Ниразу не вызывается. Т.к. ошибка валидации модели
+            mock.Verify(m => m.SaveBook(It.IsAny<Book>()), Times.Never());
+            //Отображается представление Edit
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
     }
 }

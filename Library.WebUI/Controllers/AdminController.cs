@@ -30,5 +30,22 @@ namespace Library.WebUI.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                repository.SaveBook(book);
+                TempData["message"] = string.Format("{0} был сохранен", book.Name);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                //Если что то не так с данными
+                return View(book);
+            }
+            
+        }
+
     }
 }

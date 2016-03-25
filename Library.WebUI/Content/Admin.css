@@ -21,12 +21,13 @@ TABLE.grid TH.NumericCol, Table.grid TD.NumericCol
 .editor-field { margin-bottom: .8em; } 
 .editor-label { font-weight: bold; } 
 .editor-label:after { content: ":" }
-/*
+
+DIV.message { background: gray; color:White; padding: .2em; margin-top:.25em; }
+
 DIV#content { padding: .9em; }  
-DIV.Message { background: gray; color:White; padding: .2em; margin-top:.25em; } 
- 
+  
 .field-validation-error { color: red; display: block; } 
 .field-validation-valid { display: none; } 
 .input-validation-error { border: 1px solid red; background-color: #ffeeee; } 
 .validation-summary-errors { font-weight: bold; color: red; } 
-.validation-summary-valid { display: none; }*/
+.validation-summary-valid { display: none; }
