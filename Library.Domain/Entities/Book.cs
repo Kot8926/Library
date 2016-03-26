@@ -7,7 +7,7 @@ namespace Library.Domain.Entities
     {
         [HiddenInput( DisplayValue = false )]
         public int BookId { get; set; }
-
+        
         public string Name { get; set; }
 
         public string Author { get; set; }

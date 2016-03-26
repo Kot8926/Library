@@ -9,5 +9,7 @@ namespace Library.Domain.Abstract
         IQueryable<Book> Books { get; }
 
         void SaveBook(Book book);
+
+        Book DeleteBook(int idBook);
     }
 }

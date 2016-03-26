@@ -14,6 +14,7 @@ namespace Library.Domain.Concrete
             get { return context.Books; }
         }
 
+        //Сохранение изменений и добавление книги
         public void SaveBook(Book book)
         {
             //Если id = 0 добавляем
@@ -36,6 +37,18 @@ namespace Library.Domain.Concrete
             }
 
             context.SaveChanges();
+        }
+
+        //Удаление книги
+        public Book DeleteBook(int idBook)
+        {
+            Book dbEntry = context.Books.Find(idBook);
+            if (dbEntry != null)
+            {
+                context.Books.Remove(dbEntry);
+                context.SaveChanges();
+            }
+            return dbEntry;
         }
     }
 }

@@ -126,5 +126,28 @@ namespace Library.UnitTest
             //Отображается представление Edit
             Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
+
+        //Удаление книги--------------------------------------------------------------------------------------------------------------------------------
+        [TestMethod]
+        public void Delete_Book()
+        {
+            //Arrange
+            Book book = new Book { BookId = 1, Name = "test"};
+
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(b => b.Books).Returns(new List<Book> { 
+            book,
+            new Book {BookId = 2, Name = "book2"},
+            new Book {BookId = 3, Name = "book3"},
+            }.AsQueryable());
+
+            AdminController target = new AdminController(mock.Object);
+
+            //Act
+            ActionResult result = target.Delete(book.BookId);
+
+            //Assert
+            mock.Verify(m => m.DeleteBook(book.BookId));
+        }
     }
 }
