@@ -8,6 +8,7 @@ using Library.Domain.Entities;
 
 namespace Library.WebUI.Controllers
 {
+    [Authorize]  //Фильтр предоставляет доступ к методам действия если пройдена авторизация
     public class AdminController : Controller
     {
         IBookRepository repository;

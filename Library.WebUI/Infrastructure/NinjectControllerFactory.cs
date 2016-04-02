@@ -9,6 +9,8 @@ using Library.Domain.Abstract;
 using System.Collections.Generic;
 using Library.Domain.Concrete;
 using System.Configuration;
+using Library.WebUI.Infrastructure.Abstract;
+using Library.WebUI.Infrastructure.Concrete;
 
 namespace Library.WebUI.Infrastructure
 {
@@ -41,7 +43,8 @@ namespace Library.WebUI.Infrastructure
             {
                 WriteAsFile = bool.Parse(ConfigurationManager.AppSettings["Email.WriteAsFile"] ?? "false")
             };
-            ninjectKernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>().WithConstructorArgument("settings", emailSettings);   
+            ninjectKernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>().WithConstructorArgument("settings", emailSettings);
+            ninjectKernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
        }
     }
 }
