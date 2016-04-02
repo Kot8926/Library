@@ -1,0 +1,19 @@
+﻿@model Library.WebUI.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Log In</h1>
+<p>Введите имя и пароль для входа</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true);
+    @Html.EditorForModel();
+    
+    <p>
+        <input type="submit" value="Log in" />
+    </p>
+}
