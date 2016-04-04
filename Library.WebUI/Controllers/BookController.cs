@@ -42,5 +42,14 @@ namespace Library.WebUI.Controllers
             return View(vModel);
         }
 
+        public FileContentResult GetImage(int bookId)
+        {
+            Book book = reposit.Books.FirstOrDefault(b => b.BookId == bookId);
+            if (book != null)
+            {
+                return File(book.ImageData, book.ImageMimeType);
+            }
+            else return null;
+        }
     }
 }

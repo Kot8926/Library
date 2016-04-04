@@ -17,5 +17,10 @@ namespace Library.Domain.Entities
         public int Year { get; set; }
 
         public decimal PriceLoss { get; set; }
+
+        public byte[] ImageData { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string ImageMimeType { get; set; }
     }
 }

@@ -33,6 +33,8 @@ namespace Library.Domain.Concrete
                     dbEntry.Genre = book.Genre;
                     dbEntry.Year = book.Year;
                     dbEntry.PriceLoss = book.PriceLoss;
+                    dbEntry.ImageData = book.ImageData;
+                    dbEntry.ImageMimeType = book.ImageMimeType;
                 }             
             }
 

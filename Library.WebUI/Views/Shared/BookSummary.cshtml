@@ -1,16 +1,25 @@
 ﻿@model Library.Domain.Entities.Book
 
-<div class="item">
-    <h2>@Model.Name</h2>
-    <!--Добавим кнопку--> 
-    @using (Html.BeginForm("AddToCart", "Cart"))
+ <div class="item">
+    @if (Model.ImageData != null) 
     {
-        @Html.HiddenFor(x => x.BookId);
-        @Html.Hidden("returnUrl", Request.Url.PathAndQuery);
-        <input type="submit" value="+ Add to cart" />
+    <div style="float: left; margin-right: 20px">
+        <img width="75" height="75" src="@Url.Action("GetImage", "Book", new {Model.BookId })" />
+    </div>
     }
 
-    <h4>@Model.PriceLoss.ToString("c")</h4>
+
+   <h2>@Model.Name</h2>
+   <!--Добавим кнопку-->
+     <div class="item">
+         @using (Html.BeginForm("AddToCart", "Cart"))
+         {
+             @Html.HiddenFor(x => x.BookId);
+             @Html.Hidden("returnUrl", Request.Url.PathAndQuery);
+             <input type="submit" value="+ Add to cart" />
+         }
+    </div>
+         <h4>@Model.PriceLoss.ToString("c")</h4>
 </div>
 
 

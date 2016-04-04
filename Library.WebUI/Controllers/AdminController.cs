@@ -32,7 +32,7 @@ namespace Library.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Book book)
+        public ActionResult Edit(Book book, HttpPostedFileBase image)
         {
             DateTime date = DateTime.Now;
 
@@ -59,6 +59,12 @@ namespace Library.WebUI.Controllers
 
             if (ModelState.IsValid)
             {
+                if (image != null)
+                {
+                    book.ImageMimeType = image.ContentType;
+                    book.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(book.ImageData, 0, image.ContentLength);
+                }
                 repository.SaveBook(book);
                 TempData["message"] = string.Format("{0} был сохранен", book.Name);
                 return RedirectToAction("Index");

@@ -91,10 +91,10 @@ namespace Library.UnitTest
 
             AdminController target = new AdminController(mock.Object);
 
-            Book book = new Book { Name = "Book1" };
+            Book book = new Book { Name = "Book1", Author="Author", Genre="Genre", Year=1990, PriceLoss= 120 };
 
             //Act
-            ActionResult result = target.Edit(book);
+            ActionResult result = target.Edit(book, null);
 
             //Assert
             //Проверяет вызывается ли метод
@@ -118,7 +118,7 @@ namespace Library.UnitTest
             target.ModelState.AddModelError("error", "error");
 
             //Act
-            ActionResult result = target.Edit(book);
+            ActionResult result = target.Edit(book, null);
 
             //Assert
             //Ниразу не вызывается. Т.к. ошибка валидации модели
